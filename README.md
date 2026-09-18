@@ -112,6 +112,12 @@ git add -A && git commit -m "make it ours" && git push
 
 In the repo: **Settings → Pages → Source: `Deploy from a branch` → `main` / `root`.**
 
+> **After every push, bump the `?v=` number** on the script and stylesheet tags
+> at the top and bottom of `index.html` (they're all the same number). GitHub
+> Pages tells browsers to cache those files, so anyone who has already opened
+> the page can otherwise keep seeing the old version. Changing the number makes
+> it a new URL, which forces a fresh download.
+
 Live a minute later at `https://<your-username>.github.io/birthday-desktop/`.
 
 > **Heads up:** a public repo means the photos and letters are public too. If you'd
