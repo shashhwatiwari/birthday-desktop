@@ -1,10 +1,14 @@
 # birthday-desktop 💌
 
-A scrollable retro-desktop / digital-scrapbook birthday page: pinned polaroids on a
-corkboard, a draggable Winamp-style player looping "our song," and sealed envelopes
-that open into handwritten love notes.
+A tiny top-down pixel game, made as a birthday present.
 
-No build step, no frameworks, no dependencies. Three files and a folder of photos.
+She starts on a small island. She walks around with the arrow keys, finds sealed
+envelopes scattered along the paths — each one is a letter — and picture frames in
+a little gallery holding your photos. A jukebox plays your song on a loop. When
+she's read every letter, the cake at the far end of the island has something to say.
+
+Hand-drawn pixel art, no sprite sheets, no engine, no build step, no dependencies.
+Everything is drawn from text in `js/art.js` at runtime.
 
 ---
 
@@ -12,53 +16,50 @@ No build step, no frameworks, no dependencies. Three files and a folder of photo
 
 **Everything you edit lives in one file: [`js/content.js`](js/content.js).**
 
-Open it and change:
-
 | What | Where |
 |---|---|
-| Their name, your name, tab title | `partnerName`, `yourName`, `pageTitle` |
-| The "days together" counter | `startDate` (format `YYYY-MM-DD`) |
+| Her name, your name, tab title | `partnerName`, `yourName`, `pageTitle` |
+| "days together" on the signpost | `startDate` (`YYYY-MM-DD`) |
+| Title screen wording | `title` |
+| The signpost by the start | `sign` |
 | The song | `song.youtubeId` |
-| The boot-screen text | `bootLines` |
-| The opening letter | `hero` |
 | The photos | `photos` |
-| The envelopes / love notes | `notes` |
-| The closing message | `finale` |
+| The letters | `notes` |
+| What the cake says at the end | `finale` |
 
 ### Photos
 
-1. Drop your images into the `images/` folder.
-2. List them in the `photos` array:
+Drop your images into `images/`, then list them:
 
 ```js
-{ src: "images/photo1.jpg", caption: "the first one", date: "may 2023", rotate: -4, pin: "tape" }
+{ src: "images/photo1.jpg", caption: "the first one", date: "may 2023" }
 ```
 
-- `rotate` — tilt in degrees, keep it between `-8` and `8`
-- `pin` — `"tape"`, `"pushpin"`, or `"clip"`
+Each photo becomes a picture frame inside the gallery. Square-ish images look best.
+Resize anything huge down to ~1600px wide so the page stays quick.
 
-Square-ish images look best (they're cropped to a square in the polaroid frame).
-Resize anything huge down to ~1600px wide first so the page loads fast.
+If a file isn't there yet, the frame still works and the panel says
+*"photo1.jpg isn't in /images yet"* — so you can walk the island before you've
+gathered the pictures.
 
-If a photo file is missing, that polaroid shows a "drop it in /images" placeholder
-instead of breaking — so you can preview the site before you've gathered the pictures.
+### Letters
 
-### Notes
-
-Each entry in `notes` becomes one sealed envelope. Add or remove as many as you like —
-the grid and the "x of y opened" counter adjust on their own.
+Each entry in `notes` becomes one envelope somewhere on the island:
 
 ```js
 {
-  label: "open me first",          // text under the envelope
   title: "a letter, for your birthday",
   body: ["paragraph one", "paragraph two"],
   ps: "optional p.s. line",
 }
 ```
 
-Opened envelopes are remembered in `localStorage`, so they stay unsealed if they
-come back to the page later.
+Add or remove as many as you like. There are eight hand-placed spots along the
+paths; past that, extras get placed automatically on open ground. The "letters
+x/y" counter and the cake's unlock condition both follow the length of the list.
+
+Opened envelopes are remembered in `localStorage` — they stay unsealed, and the
+envelope sprite changes to show the letter pulled out.
 
 ### The song
 
@@ -69,18 +70,31 @@ https://www.youtube.com/watch?v=KtlgYxa6BMU
                                  ^^^^^^^^^^^ this bit
 ```
 
-The page plays it through a hidden YouTube player behind the custom retro UI, so
-nothing copyrighted is stored in this repo. **Check the ID before you send the link** —
-open the YouTube page for the track you want and copy its ID.
+It plays through a hidden YouTube player behind the jukebox, so nothing
+copyrighted is stored in this repo. **Check the ID before you send the link** —
+open the YouTube page for the version you actually want and copy its ID.
 
 Browsers block audio until someone interacts with the page. That's what the
-"press to begin" button on the boot screen is for — the click starts the music.
+"press start" button is for — the click starts the music.
 
 ---
 
-## 2. Preview it locally
+## 2. Controls
 
-Just open `index.html` in a browser, or run a tiny local server:
+| | |
+|---|---|
+| Walk | arrow keys or `WASD` |
+| Look at something | `space`, `enter` or `E` |
+| Close a letter | `space` again (press once more to skip the typing) |
+| On a phone | the D-pad and the ♥ button |
+
+The game pauses itself when the tab isn't visible.
+
+---
+
+## 3. Preview it locally
+
+Open `index.html` in a browser, or:
 
 ```bash
 python3 -m http.server 8000
@@ -90,39 +104,55 @@ Then visit `http://localhost:8000`.
 
 ---
 
-## 3. Put it on GitHub Pages
+## 4. Put it on GitHub Pages
 
 ```bash
 git add -A && git commit -m "make it ours" && git push
 ```
 
-Then in the repo: **Settings → Pages → Source: `Deploy from a branch` → `main` / `root` → Save.**
+In the repo: **Settings → Pages → Source: `Deploy from a branch` → `main` / `root`.**
 
-A minute later it's live at:
+Live a minute later at `https://<your-username>.github.io/birthday-desktop/`.
 
-```
-https://<your-username>.github.io/birthday-desktop/
-```
-
-> **Heads up:** a public repo means the photos and letters are public too. If you want
-> it private, GitHub Pages on private repos needs a paid GitHub plan — the free
+> **Heads up:** a public repo means the photos and letters are public too. If you'd
+> rather they weren't, GitHub Pages on a private repo needs a paid plan — the free
 > alternative is dragging this folder onto [netlify.com/drop](https://app.netlify.com/drop),
-> which gives you an unlisted URL from a private folder in seconds.
+> which gives an unlisted URL from a private folder in seconds.
 
 ---
 
 ## Structure
 
 ```
-index.html        page skeleton (you shouldn't need to touch it)
-css/style.css     the whole look — retro palette lives in :root
+index.html        page shell — canvas, HUD, dialog, title screen
+css/style.css     the pastel pixel UI. every colour is a variable at the top
 js/content.js     ← YOUR CONTENT GOES HERE
-js/main.js        builds the page from content.js
+js/art.js         pixel art: sprites written as text, plus the tile painters
+js/world.js       builds the map and decides where everything sits
+js/game.js        the engine: movement, collision, camera, dialogs, music
 images/           your photos
 ```
 
-## Reskinning
+## Redrawing things
 
-Every colour is a CSS variable at the top of `css/style.css`. Change `--pink`,
-`--amber`, `--mint` and the wallpaper gradient (`--bg-deep` / `--bg-mid` / `--bg-warm`)
-and the entire site shifts mood.
+**Colours.** Every colour in the UI is a CSS variable at the top of
+`css/style.css` (`--pink`, `--orange`, `--blue`). The in-game palette is the `PAL`
+table at the top of `js/art.js` — the two use matching values.
+
+**Sprites** are plain text. One character per pixel, `.` is transparent:
+
+```js
+flowerPink: makeSprite([
+  ".p.p.",
+  "ppppp",
+  ".pyp.",
+  "ppppp",
+  ".G.G.",
+]),
+```
+
+Rows are padded automatically, so a short row won't break anything.
+
+**The map** is drawn in code in `js/world.js` using `rect`, `hLine` and `vLine`
+over a tile grid. The zones (pond, park, gallery, plaza) are coordinates in the
+`ZONE` object — move those and the island rearranges itself.

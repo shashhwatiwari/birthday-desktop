@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <title>happy birthday ♥</title>
-<meta name="description" content="a little corner of the internet, for you." />
-<meta name="theme-color" content="#0d0b1a" />
+<meta name="description" content="a small island, made for you." />
+<meta name="theme-color" content="#ffd9e6" />
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>💌</text></svg>" />
 
@@ -15,161 +15,98 @@
 
 <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="is-booting">
+<body>
 
-<!-- ═══════════ CRT BOOT SCREEN ═══════════ -->
-<div class="boot" id="boot">
-  <div class="boot__scanlines" aria-hidden="true"></div>
-  <div class="boot__inner">
-    <pre class="boot__log" id="boot-log" aria-live="polite"></pre>
-    <button class="boot__btn" id="boot-btn" hidden>
-      <span class="boot__btn-label">▶ press to begin</span>
-      <span class="boot__btn-sub">(turn your sound on)</span>
+<!-- ═══════════ THE GAME ═══════════ -->
+<div class="stage" id="stage">
+  <canvas id="screen" width="320" height="192" aria-label="a pixel island you can walk around"></canvas>
+
+  <!-- top-left: how many letters found -->
+  <div class="hud hud--notes">
+    <span class="hud__heart">♥</span>
+    <span class="hud__label">letters</span>
+    <span class="hud__count" id="hud-count">0/6</span>
+    <span class="hud__track"><span class="hud__fill" id="hud-bar"></span></span>
+  </div>
+
+  <!-- top-right: what's playing -->
+  <div class="hud hud--music" id="hud-music">
+    <span class="hud__note" id="hud-note">·</span>
+    <span class="hud__marquee"><span id="hud-track">our song</span></span>
+  </div>
+
+  <!-- "press space" nudge, shown when you're next to something -->
+  <div class="prompt" id="prompt" hidden>
+    <span class="prompt__key">space</span>
+    <span id="prompt-label">look</span>
+  </div>
+
+  <!-- on-screen controls for phones -->
+  <div class="pad" id="pad">
+    <div class="pad__dir">
+      <button class="pad__btn pad__btn--up"    data-key="up"    aria-label="up">▲</button>
+      <button class="pad__btn pad__btn--left"  data-key="left"  aria-label="left">◀</button>
+      <button class="pad__btn pad__btn--right" data-key="right" aria-label="right">▶</button>
+      <button class="pad__btn pad__btn--down"  data-key="down"  aria-label="down">▼</button>
+    </div>
+    <button class="pad__action" data-key="action" aria-label="interact">♥</button>
+  </div>
+</div>
+
+<!-- ═══════════ DIALOG ═══════════ -->
+<div class="dialog" id="dialog" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+    <div class="panel__bar">
+      <span class="panel__dots"><i></i><i></i><i></i></span>
+      <span class="panel__title" id="dlg-title"></span>
+      <button class="panel__close" id="dlg-close" aria-label="close">✕</button>
+    </div>
+
+    <div class="panel__body">
+      <p class="letter" id="dlg-body"></p>
+
+      <div class="photo" id="dlg-photo" hidden>
+        <div class="photo__mat">
+          <img id="dlg-img" alt="" />
+          <p class="photo__missing" id="dlg-missing" hidden></p>
+        </div>
+        <p class="photo__sub" id="dlg-sub"></p>
+      </div>
+
+      <p class="letter__ps" id="dlg-ps"></p>
+      <p class="letter__sign" id="dlg-sign"></p>
+    </div>
+
+    <div class="panel__foot">
+      <span class="foot--key">press <b>space</b> to close</span>
+      <span class="foot--tap">tap outside to close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TITLE SCREEN ═══════════ -->
+<div class="title" id="title">
+  <div class="title__card">
+    <p class="title__super">happy birthday</p>
+    <h1 class="title__name" id="title-name"></h1>
+    <p class="title__sub" id="title-sub"></p>
+    <button class="title__btn" id="start-btn">
+      <span id="title-hint">press start</span>
     </button>
-  </div>
-</div>
-
-<!-- ═══════════ MENU BAR ═══════════ -->
-<div class="menubar" id="menubar">
-  <span class="menubar__logo">♥</span>
-  <span class="menubar__item menubar__item--title" id="menubar-title">untitled</span>
-  <span class="menubar__item menubar__hide">File</span>
-  <span class="menubar__item menubar__hide">Edit</span>
-  <span class="menubar__item menubar__hide">Us</span>
-  <span class="menubar__spacer"></span>
-  <span class="menubar__item" id="menubar-days">— days</span>
-  <span class="menubar__item menubar__clock" id="menubar-clock">--:--</span>
-</div>
-
-<!-- ═══════════ THE DESKTOP ═══════════ -->
-<main class="desktop" id="desktop">
-
-  <!-- ── Section 1: opening window ── -->
-  <section class="section section--hero" id="sec-hero">
-    <div class="win win--hero" data-reveal>
-      <div class="win__bar">
-        <span class="win__lights"><i></i><i></i><i></i></span>
-        <span class="win__title" id="hero-wintitle">read_me.txt</span>
-      </div>
-      <div class="win__body">
-        <h1 class="hero__headline" id="hero-headline"></h1>
-        <p class="hero__name" id="hero-name"></p>
-        <div class="hero__text" id="hero-text"></div>
-        <div class="hero__hint" id="hero-hint"></div>
-      </div>
-    </div>
-    <div class="sticky-note sticky-note--hero" data-reveal>
-      <span>press play<br />on the song<br />first →</span>
-    </div>
-  </section>
-
-  <!-- ── Section 2: photos ── -->
-  <section class="section" id="sec-photos">
-    <h2 class="section__label" data-reveal><span>📁</span> our_photos</h2>
-    <p class="section__sub" data-reveal>click any of them to look closer</p>
-    <div class="corkboard" id="corkboard"></div>
-  </section>
-
-  <!-- ── Section 3: counter ── -->
-  <section class="section section--counter" id="sec-counter">
-    <div class="counter" data-reveal>
-      <div class="counter__screen">
-        <div class="counter__num" id="counter-num">0000</div>
-        <div class="counter__label">days with you</div>
-      </div>
-      <div class="counter__sub" id="counter-sub"></div>
-    </div>
-  </section>
-
-  <!-- ── Section 4: envelopes ── -->
-  <section class="section" id="sec-notes">
-    <h2 class="section__label" data-reveal><span>💌</span> love_notes</h2>
-    <p class="section__sub" data-reveal>
-      six sealed envelopes. <span id="notes-progress">0 of 6 opened</span>
+    <p class="title__keys">
+      <span>arrows / wasd to walk</span>
+      <span>space to look</span>
+      <span>turn your sound on ♪</span>
     </p>
-    <div class="envelopes" id="envelopes"></div>
-  </section>
-
-  <!-- ── Section 5: finale ── -->
-  <section class="section section--finale" id="sec-finale">
-    <div class="win win--finale" data-reveal>
-      <div class="win__bar">
-        <span class="win__lights"><i></i><i></i><i></i></span>
-        <span class="win__title" id="finale-wintitle">goodbye.txt</span>
-      </div>
-      <div class="win__body">
-        <h2 class="finale__headline" id="finale-headline"></h2>
-        <div class="finale__text" id="finale-text"></div>
-        <p class="finale__sig"><span id="finale-sigline"></span><br /><em id="finale-name"></em></p>
-      </div>
-    </div>
-    <button class="hearts-btn" id="hearts-btn">♥ press for hearts ♥</button>
-  </section>
-
-  <footer class="footer">
-    <span id="footer-text">made by hand ♥</span>
-  </footer>
-</main>
-
-<!-- ═══════════ MUSIC PLAYER ═══════════ -->
-<div class="player" id="player" hidden>
-  <div class="player__bar" id="player-drag">
-    <span class="player__grip" aria-hidden="true">⠿</span>
-    <span class="player__wintitle">now_playing</span>
-    <button class="player__min" id="player-min" title="minimise">—</button>
-  </div>
-  <div class="player__body" id="player-body">
-    <div class="player__screen">
-      <div class="player__viz" id="player-viz" aria-hidden="true"></div>
-      <div class="player__marquee"><span id="player-track">—</span></div>
-      <div class="player__time"><span id="player-time">0:00</span> <span class="player__status" id="player-status">stopped</span></div>
-    </div>
-    <div class="player__controls">
-      <button class="player__btn player__btn--play" id="player-play" aria-label="play or pause">▶</button>
-      <button class="player__btn" id="player-restart" aria-label="restart">↺</button>
-      <input class="player__vol" id="player-vol" type="range" min="0" max="100" value="55" aria-label="volume" />
-    </div>
   </div>
 </div>
 
-<!-- ═══════════ PHOTO LIGHTBOX ═══════════ -->
-<div class="overlay" id="photo-overlay" hidden>
-  <div class="win win--modal" role="dialog" aria-modal="true" aria-label="photo">
-    <div class="win__bar">
-      <span class="win__lights"><i></i><i></i><i></i></span>
-      <span class="win__title" id="photo-title">photo</span>
-      <button class="win__close" data-close="photo-overlay" aria-label="close">✕</button>
-    </div>
-    <div class="win__body win__body--photo">
-      <img id="photo-img" alt="" />
-      <p class="photo-modal__cap" id="photo-cap"></p>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ NOTE READER ═══════════ -->
-<div class="overlay" id="note-overlay" hidden>
-  <div class="win win--modal win--letter" role="dialog" aria-modal="true" aria-label="letter">
-    <div class="win__bar">
-      <span class="win__lights"><i></i><i></i><i></i></span>
-      <span class="win__title" id="note-wintitle">letter.txt</span>
-      <button class="win__close" data-close="note-overlay" aria-label="close">✕</button>
-    </div>
-    <div class="win__body win__body--letter">
-      <div class="letter">
-        <h3 class="letter__title" id="note-title"></h3>
-        <div class="letter__body" id="note-body"></div>
-        <p class="letter__ps" id="note-ps"></p>
-        <p class="letter__sig" id="note-sig"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- hidden youtube audio host -->
+<div class="hearts" id="hearts" aria-hidden="true"></div>
 <div class="yt-host" aria-hidden="true"><div id="yt-player"></div></div>
 
 <script src="js/content.js"></script>
-<script src="js/main.js"></script>
+<script src="js/art.js"></script>
+<script src="js/world.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>
