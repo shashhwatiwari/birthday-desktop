@@ -321,7 +321,7 @@
     typing = setInterval(() => {
       el.textContent = text.slice(0, ++i);
       if (i >= text.length) { clearInterval(typing); typing = null; }
-    }, 16);
+    }, 11);
   }
 
   function closeDialog() {

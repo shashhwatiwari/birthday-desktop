@@ -1,16 +1,17 @@
 /* ============================================================
    content.js — THE ONLY FILE YOU NEED TO EDIT.
-   Change the words, add your photos, write your notes. Save. Done.
+   Change the words, swap the photos, rewrite the letters. Save. Done.
    ============================================================ */
 
 const CONTENT = {
   /* ---------- 1. THE BASICS ---------- */
-  partnerName: "Your Person",       // big name on the title screen
-  yourName: "Me",                   // signs the letters
+  partnerName: "Buns",              // big name on the title screen
+  yourName: "Shashwat",             // signs the letters
   pageTitle: "happy birthday ♥",    // browser tab title
 
-  // The day you two started — shown on the signpost. Format: YYYY-MM-DD
-  startDate: "2023-05-14",
+  // The day you two started — adds a "N days together" line to the signpost.
+  // Left blank on purpose: fill it in (YYYY-MM-DD) and the line appears.
+  startDate: "",
 
   /* ---------- 2. TITLE SCREEN ---------- */
   title: {
@@ -39,56 +40,62 @@ const CONTENT = {
   },
 
   /* ---------- 5. THE PHOTOS ---------- */
-  // Drop your images into the /images folder, then list them here.
-  // Each one becomes a picture frame inside the little house.
+  // These become picture frames inside the little house.
+  // Captions are my guesses from the photos — rewrite them in your own words.
   photos: [
-    { src: "images/photo1.jpg", caption: "the first one",       date: "may 2023" },
-    { src: "images/photo2.jpg", caption: "you, laughing",       date: "aug 2023" },
-    { src: "images/photo3.jpg", caption: "that terrible diner", date: "oct 2023" },
-    { src: "images/photo4.jpg", caption: "3am, no reason",      date: "jan 2024" },
-    { src: "images/photo5.jpg", caption: "the good trip",       date: "jun 2024" },
-    { src: "images/photo6.jpg", caption: "my favourite face",   date: "today" },
+    { src: "images/photo1.jpg", caption: "us",                        date: "" },
+    { src: "images/photo2.jpg", caption: "walking back at golden hour", date: "" },
+    { src: "images/photo3.jpg", caption: "birthday girl",             date: "" },
+    { src: "images/photo4.jpg", caption: "you, laughing",             date: "" },
+    { src: "images/photo5.jpg", caption: "caught you mid-smile",      date: "" },
+    { src: "images/photo6.jpg", caption: "the ball night",            date: "" },
   ],
 
   /* ---------- 6. THE LETTERS ---------- */
-  // Each one becomes an envelope somewhere on the island.
+  // The first one sits closest to where she starts, so she'll find it first.
   notes: [
     {
       title: "a letter, for your birthday",
       body: [
-        "I'm not good at saying this out loud, so I typed it instead.",
-        "Write the real thing here. Take your time with it — this is the one they'll read twice.",
+        "Hi Buns! The website may be AI generated but my feelings behind are surely real.",
+        "I hope you have the best birthday, I'm sorry for not being around for the last few. I miss you dearly. Love you",
       ],
       ps: "p.s. there are more of these out here. keep walking.",
     },
     {
       title: "the night we met",
-      body: ["Tell the story. The version only you two know."],
+      body: [
+        "I know we started talking online but looking back at it i think a lot of the moments we have shared could be scenes from a show, like the dancing at stables, the goli goli on SARC terrace, the ball night.",
+        "We've had our little main character moments all throughout and im glad we did, gives me a lot of memories to cherish",
+      ],
     },
     {
-      title: "an incomplete list",
+      title: "things i love",
       body: [
-        "things I love, in no order:",
-        "the thing you do with your hands when you're thinking. your laugh, specifically the ugly one. the way you say my name when you're half asleep.",
+        "You imitating me for no reason at times like a kid almost, kinda funny and also good because i can call you stupid",
+        "You being there for every little thing and caring about it as much as i do, if not more",
+        "Those weird faces and sounds you make (i like them if im in a good enough mood though fair warning dont just start doing more of that)",
       ],
-      ps: "the list keeps going. it always does.",
     },
     {
       title: "open on a bad day",
-      body: ["Save this one for a hard day. Say the thing you'd want them to hear."],
+      body: [
+        "youre brave and capable, youve gone through so much, never panic, never fret, youve helped me through some of my worst days.",
+        "you say it yourself, you can learn and get past everything, never hesitate to ask for help either, we are all here and we all love you, youre more than enough and never alone",
+      ],
     },
     {
-      title: "a promise",
-      body: ["Something you mean. Keep it short."],
-    },
-    {
-      title: "last one",
-      body: ["Happy birthday. Go find the cake."],
-      ps: "that's all of them ♥",
+      title: "something i mean",
+      body: [
+        "Youre the most valuable person that has ever come to my life, despite my actions conveying otherwise at times.",
+        "youre my best friend and beyond, i love you, sorry about everything and also a big thank you for everything",
+      ],
+      ps: "that's all of them ♥ go find the cake.",
     },
   ],
 
   /* ---------- 7. THE ENDING (at the cake) ---------- */
+  // These are my words, not yours — swap them for something you'd say.
   finale: {
     headline: "happy birthday",
     body: [

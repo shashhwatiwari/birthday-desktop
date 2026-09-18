@@ -20,7 +20,7 @@
 
   --font-pixel: "Press Start 2P", ui-monospace, monospace;
   --font-term:  "VT323", ui-monospace, monospace;
-  --font-hand:  "Caveat", cursive;
+  --font-letter: "Pixelify Sans", ui-monospace, monospace;
 
   --px: 3px;                 /* thickness of the chunky pixel borders */
 }
@@ -273,24 +273,25 @@ body.is-playing .pad { display: flex; }
 .letter {
   margin: 0;
   white-space: pre-wrap;
-  font-family: var(--font-hand);
-  font-size: clamp(23px, 3.4vw, 28px);
+  font-family: var(--font-letter);
+  font-size: clamp(17px, 2.5vw, 20px);
   line-height: 34px;
+  letter-spacing: .01em;
   color: #40506b;
   min-height: 34px;
 }
 .letter__ps {
   margin: 22px 0 0;
-  font-family: var(--font-hand);
-  font-size: 22px;
+  font-family: var(--font-letter);
+  font-size: 15px; line-height: 1.7;
   color: var(--ink-2);
 }
 .letter__ps:empty, .letter__sign:empty { display: none; }
 .letter__sign {
   margin: 16px 0 0;
   text-align: right;
-  font-family: var(--font-hand);
-  font-size: 27px; font-weight: 700;
+  font-family: var(--font-letter);
+  font-size: 19px; font-weight: 700;
   color: var(--pink-deep);
 }
 
@@ -333,8 +334,8 @@ body.is-playing .pad { display: flex; }
 }
 .photo__sub {
   margin: 14px 0 0;
-  font-family: var(--font-hand);
-  font-size: 24px;
+  font-family: var(--font-letter);
+  font-size: 17px;
   color: var(--ink-2);
 }
 
@@ -369,10 +370,10 @@ body.is-playing .pad { display: flex; }
 }
 .title__name {
   margin: 14px 0 6px;
-  font-family: var(--font-hand);
-  font-size: clamp(52px, 11vw, 92px);
+  font-family: var(--font-letter);
+  font-size: clamp(40px, 8.5vw, 70px);
   font-weight: 700;
-  line-height: .95;
+  line-height: 1.05;
   color: var(--pink-deep);
 }
 .title__sub {
