@@ -154,6 +154,8 @@
   /* ══════════════ INTERACTION ══════════════ */
   const INTERACTIVE = new Set(["note", "photo", "jukebox", "sign", "cake"]);
   let target = null;
+  let lastOpenedBy = null;   // whatever opened the dialog we're looking at
+  let justClosed = null;     // ...and don't re-open it until she steps away
 
   function updateInteraction() {
     // while a letter is open, swallow the action press so it can't leak
@@ -167,10 +169,18 @@
       const d = Math.hypot(ex - player.x, ey - player.y);
       if (d < bestD) { bestD = d; best = e; }
     }
-    target = best;
-    setPrompt(best);
 
-    if (best && actionEdge) interact(best);
+    /* Closing a letter while still standing on its envelope used to let the
+       very next press re-open it, so tapping space twice looked like the
+       letter never closed. Keep it shut until she moves off it — walking
+       away and back is what arms it again. */
+    if (justClosed && best !== justClosed) justClosed = null;
+    const suppressed = best !== null && best === justClosed;
+
+    target = suppressed ? null : best;
+    setPrompt(target);
+
+    if (target && actionEdge) interact(target);
     actionEdge = false;
   }
 
@@ -193,6 +203,7 @@
   }
 
   function interact(e) {
+    lastOpenedBy = e;
     switch (e.type) {
       case "note": {
         opened.add(e.data.index);
@@ -258,12 +269,22 @@
   }
 
   /* ══════════════ SAVED PROGRESS ══════════════ */
-  const SAVE_KEY = "bday.opened.v2";
+  const SAVE_KEY = "bday.opened.v3";
   let opened = new Set();
   try { opened = new Set(JSON.parse(localStorage.getItem(SAVE_KEY) || "[]")); } catch (_) {}
   const saveOpened = () => {
     try { localStorage.setItem(SAVE_KEY, JSON.stringify([...opened])); } catch (_) {}
   };
+
+  /* A save written when the letter list was a different length can hold
+     indexes that no longer exist — that's what turns the counter into "6/5",
+     and it also unlocks the cake early. Drop anything out of range. */
+  (function pruneSave() {
+    const total = (C.notes || []).length;
+    const clean = new Set([...opened].filter(
+      i => Number.isInteger(i) && i >= 0 && i < total));
+    if (clean.size !== opened.size) { opened = clean; saveOpened(); }
+  })();
   const allOpened = () => {
     const total = (C.notes || []).length;
     return total > 0 && opened.size >= total;
@@ -334,7 +355,8 @@
     }
     $("#dialog").hidden = true;
     keys.action = 0;
-    actionEdge = false;   // the press that closed it must not re-open it
+    actionEdge = false;          // the press that closed it must not re-open it
+    justClosed = lastOpenedBy;   // ...and neither must the next one
   }
 
   function wireDialog() {
